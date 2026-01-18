@@ -11,7 +11,6 @@ class MenuPage extends StatefulWidget {
   @override
   State<MenuPage> createState() => _MenuPageState();
 }
-
 class _MenuPageState extends State<MenuPage> {
   int index=0;
   TextEditingController SearchController = TextEditingController();
@@ -19,9 +18,10 @@ class _MenuPageState extends State<MenuPage> {
   List<String> items = ["By Pin", "By Name", "By Month"];
   String? selecteditems = "By Name";
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.width < 360;
     return Scaffold(
       backgroundColor: Color(0xFF1253AA),
       body: Padding(
@@ -41,11 +41,11 @@ class _MenuPageState extends State<MenuPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Expanded(
+                  Expanded(flex: 3,
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: SizedBox(
-                        height: 45,
+                        height:  size.height * 0.055,
                         child: TextFormField(
                           controller: SearchController,
                           style: TextStyle(color: Colors.white),
@@ -69,40 +69,39 @@ class _MenuPageState extends State<MenuPage> {
                         ),
                       ),
                     ),
-                  ),Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Expanded(
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
                       child: Container(
-                        height: 40,
+                        height: size.height * 0.05,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                           color: Color(0xFF05243E),
                         ),
                         child: Row(
                           children: [
-                            Padding(padding: EdgeInsets.only(left: 15)),
-                            Icon(Icons.sort, color: Colors.white),
-                            Center(
-                              child: Text(
-                                "Sort ",
+                            if (!isSmall) ...[
+                              SizedBox(width: 6),
+                              Text("  Sort ", style: TextStyle(color: Colors.white,fontSize: size.width* 0.04)),
+                            ],
+                            Expanded(
+                              child: DropdownButton<String>(
+                                value: selecteditems,
+                                dropdownColor: Color(0xFF05243E),
+                                iconEnabledColor: Colors.white,
                                 style: TextStyle(color: Colors.white),
+                                items: items.map((e)=>DropdownMenuItem(value: e,
+                                  child: Text(e, style: TextStyle(color: Colors.white)),
+                                )
+                                ).toList(),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    selecteditems = newValue;
+                                  });
+                                },
                               ),
-                            ),
-                            DropdownButton<String>(
-                              value: selecteditems,
-                              dropdownColor: Color(0xFF05243E),
-                              iconEnabledColor: Colors.white,
-                              style: TextStyle(color: Colors.white),
-                              items: items.map((e)=>DropdownMenuItem(value: e,
-                                child: Text(e, style: TextStyle(color: Colors.white)),
-                              )
-                              ).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selecteditems = newValue;
-                                });
-                              },
                             )
                           ],
                         ),
@@ -111,10 +110,10 @@ class _MenuPageState extends State<MenuPage> {
                   ),
                 ],),
               Expanded(
-                child: FutureBuilder(
-                  future:
+                child: StreamBuilder(
+                  stream:
                   FirebaseFirestore.instance.collection("user").doc(
-                      FirebaseAuth.instance.currentUser?.uid).collection("task").get(),
+                      FirebaseAuth.instance.currentUser?.uid).collection("task").snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
@@ -125,7 +124,7 @@ class _MenuPageState extends State<MenuPage> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             "   Tasks List",
-                            style: TextStyle(color: Colors.white, fontSize: 22),
+                            style: TextStyle(color: Colors.white, fontSize: size.width * 0.055,),
                           ),
                         ),
                         Flexible(

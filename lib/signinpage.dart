@@ -164,7 +164,7 @@ class _SignInPageState extends State<SignInPage> {
                               );
                             },
                           );
-                        }, child: Text("ForgotPasswordasd", style: TextStyle(color: Colors.white)),
+                        }, child: Text("ForgotPassword", style: TextStyle(color: Colors.white)),
                         ),
                       ],
                     ),

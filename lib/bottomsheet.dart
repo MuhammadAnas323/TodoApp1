@@ -30,6 +30,8 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.width < 360;
     return Material(
       child: Padding(
         padding: const EdgeInsets.all(25),
@@ -68,7 +70,7 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 30),
+                SizedBox(height:size.height * 0.03),
 
                 TextFormField(
                   style: TextStyle(color: Colors.white),
@@ -100,13 +102,12 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: size.height * 0.03),
                 Row(
                   children: [
                     Expanded(
                       child: SizedBox(
-                        height: 45,
-                        // width: 10,
+                        height: size.height * 0.055,
                         child: TextFormField(
                           style: TextStyle(color: Colors.white),
                           controller:Date,
@@ -154,8 +155,7 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
                     SizedBox(width: 20,),
                     Expanded(
                       child: SizedBox(
-                        height: 45,
-                        // width: 165,
+                        height: size.height * 0.055,
                         child: TextFormField(
                           style: TextStyle(color: Colors.white),
                           controller:Time,
@@ -214,7 +214,6 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                          //fixedSize: Size(160, 45),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -223,7 +222,6 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
                         child: Text("Cancel"),
                       ),
                     ),Spacer(),
-                    // SizedBox(width: 25,),
                     ElevatedButton(
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {

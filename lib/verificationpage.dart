@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app/main.dart';
 import 'package:todo_app/signinpage.dart';
-import 'bottomnavigation bar screen.dart';
+
 
 class VerificationPage extends StatefulWidget {
   VerificationPage({super.key});
@@ -12,6 +11,7 @@ class VerificationPage extends StatefulWidget {
 
 class _VerificationPageState extends State<VerificationPage> {
   TextEditingController email = TextEditingController();
+  bool isloading=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,8 +60,8 @@ class _VerificationPageState extends State<VerificationPage> {
                       padding: const EdgeInsets.all(35),
                       child: Text(
                         "By verifying your account, you data will be "
-                        "secured and be default you are "
-                        "accepting our terms and policies",
+                            "secured and be default you are "
+                            "accepting our terms and policies",
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),
@@ -75,9 +75,15 @@ class _VerificationPageState extends State<VerificationPage> {
                     ElevatedButton(
                       onPressed: () async {
                         final user = FirebaseAuth.instance.currentUser;
+                        setState(() {
+                          isloading=true;
+                        });
                         if (user != null) {
                           try {
                             await user.sendEmailVerification();
+                            setState(() {
+                              isloading=false;
+                            });
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
@@ -86,11 +92,13 @@ class _VerificationPageState extends State<VerificationPage> {
                               ),
                             );
                           } catch (e) {
+                            isloading=false;
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text("Something Wrong")),
                             );
                           }
                         } else {
+                          isloading=false;
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text("No user is currently signed up"),
