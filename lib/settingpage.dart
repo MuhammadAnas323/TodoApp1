@@ -58,24 +58,45 @@ class _LogoutScreenState extends State<LogoutScreen> {
       isloading = false;
     });
   }
-  void deletePhoto() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return;
-    await FirebaseFirestore.instance.collection('user').doc(user!.uid).update({
-      'profile_url': FieldValue.delete(),
-    });
-    setState(() {
-      profileUrl = null;
-      profilepic = null;
-    });
-    Navigator.pop(context);
-  }
+  Future<void> deletePhoto() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
 
+      final doc = await FirebaseFirestore.instance
+          .collection('user').doc(user.uid).get();
+
+      final String? path = doc.data()?['profile_path'];
+      if (path == null) return;
+      await Supabase.instance.client.storage
+          .from('bucket1').remove([path]);
+      await FirebaseFirestore.instance.collection('user')
+          .doc(user.uid).update({
+        'profile_url': FieldValue.delete(),
+        'profile_path': FieldValue.delete(),
+      });
+      setState(() {
+        profileUrl = null;
+        profilepic = null;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Profile Photo Deleted Successfully"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      Navigator.pop(context);
+    }catch(e){
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to delete photo"),
+          backgroundColor: Colors.red,
+        ),
+      );}}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      Container(
+      body: Container(
         height: double.infinity,
         width: double.infinity,
         decoration: BoxDecoration(
@@ -174,51 +195,32 @@ class _LogoutScreenState extends State<LogoutScreen> {
                                       ),
                                       TextButton(
                                         onPressed: () async {
-                                          final messenger = ScaffoldMessenger.of(
-                                            context,
-                                          );
+                                          final messenger = ScaffoldMessenger.of(context,);
                                           Navigator.pop(context);
                                           setState(() {
                                             isloading = true;
                                           });
                                           try {
-                                            final userId = FirebaseAuth
-                                                .instance
-                                                .currentUser!
-                                                .uid;
-                                            final timestamp = DateTime.now()
-                                                .millisecondsSinceEpoch;
-                                            final path =
-                                                'user/$userId-$timestamp.jpg';
-            
+                                            final userId = FirebaseAuth.instance.currentUser!.uid;
+                                            final timestamp = DateTime.now().millisecondsSinceEpoch;
+                                            final path = 'user/$userId-$timestamp.jpg';
                                             profilepic = File(pickedFile.path);
-                                            await supabase.storage
-                                                .from('bucket1')
-                                                .upload(
-                                              path,
-                                              profilepic!,
-                                              fileOptions: const FileOptions(
-                                                upsert: true,
+
+                                            await supabase.storage.from('bucket1').upload(path, profilepic!,
+                                              fileOptions: const FileOptions(upsert: true,
                                               ),
                                             );
-                                            var imageUrl = supabase.storage
-                                                .from('bucket1')
-                                                .getPublicUrl(path);
-                                            await FirebaseFirestore.instance
-                                                .collection('user')
-                                                .doc(userId)
-                                                .update({
-                                              'profile_url': imageUrl,
+                                            var imageUrl = supabase.storage.from('bucket1').getPublicUrl(path);
+                                            await FirebaseFirestore.instance.collection('user').doc(userId)
+                                                .update({'profile_url': imageUrl, 'profile_path': path,
                                             });
-            
                                             if (!mounted) return;
                                             setState(() {
                                               isloading = false;
                                               profileUrl = imageUrl;
                                             });
                                             messenger.showSnackBar(
-                                              SnackBar(
-                                                content: Text(
+                                              SnackBar(content: Text(
                                                   "Profile uploaded successfully",
                                                 ),
                                                 backgroundColor: Colors.green,

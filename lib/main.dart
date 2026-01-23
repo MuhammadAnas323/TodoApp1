@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:todo_app/provider_class.dart';
 import 'package:todo_app/splash%20Screen.dart';
 
 import 'firebase_options.dart';
@@ -14,7 +16,10 @@ void main() async {
     url: dotenv.env["SUPABSE_URL"]!,
     anonKey: dotenv.env["ANON_KEY"]!,
   );
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Splashscreen()));
+  runApp(MultiProvider(
+    providers:[ ChangeNotifierProvider(create:(_)=>ProviderClass(),)],
+    child: MaterialApp(debugShowCheckedModeBanner: false, home: Splashscreen())),
+  );
 }
 
 class MainPage extends StatefulWidget {

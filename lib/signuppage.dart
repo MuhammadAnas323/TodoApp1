@@ -231,7 +231,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         ],
                                       ),
                                       actions: [TextButton(onPressed: () {
-                                        //Navigator.pop(dialogContext);
                                         Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(builder: (context) =>

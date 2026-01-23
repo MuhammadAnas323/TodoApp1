@@ -58,6 +58,8 @@ class _CalenderPageState extends State<CalenderPage> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.width < 360;
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text("Manage your Time",
@@ -72,7 +74,7 @@ class _CalenderPageState extends State<CalenderPage> {
             colors: [Color(0xFF1253AA), Color(0xFF05243E),])),
         child: SingleChildScrollView(
           child: Column(children: [
-            const Padding(padding: EdgeInsets.only(top: 90)),
+            const Padding(padding: EdgeInsets.only(top: 70)),
             Padding(
               padding: const EdgeInsets.all(10),
               child: TableCalendar(
@@ -89,106 +91,109 @@ class _CalenderPageState extends State<CalenderPage> {
                 onFormatChanged: onFormatChange,
               ),
             ),
-            const SizedBox(height: 60,),
-            Container(height: 110, width: 390,
-              decoration: const BoxDecoration(
+            SizedBox(height: 40,),
+            Container(height: size.height *0.130, width: size.width *0.91,
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 color: Colors.white,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 13),
-                        child: Text("Set Task For",
-                          style: TextStyle(fontSize: 17,fontWeight: .w600),),
-                      ),SizedBox.shrink(),
-                      Expanded(
-                        child: TextField(
-                          controller: TaskDate,
-                          readOnly: true,
-                          textAlign: TextAlign.start,
-                          style: const TextStyle(color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                          decoration: InputDecoration(border: OutlineInputBorder(borderSide: .none),
-                            filled: true,
-                            fillColor: Colors.transparent,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 13),
+                          child: Text("Set Task For",
+                            style: TextStyle(fontSize: 17,fontWeight: .w600),),
+                        ),SizedBox.shrink(),
+                        Expanded(
+                          child: TextField(
+                            controller: TaskDate,
+                            readOnly: true,
+                            textAlign: TextAlign.start,
+                            style: const TextStyle(color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            decoration: InputDecoration(border: OutlineInputBorder(borderSide: .none),
+                              filled: true,
+                              fillColor: Colors.transparent,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: SizedBox(height: 45, width: 230,
-                        child: TextField(
-                          controller: Task,
-                          //readOnly: true,
-                          style: const TextStyle(color: Colors.white),
-                          decoration: InputDecoration(hintText: "Task",
-                              hintStyle: TextStyle(color: Colors.white),
-                              fillColor:  Color(0xFF05243E),
-                              filled: true,
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                        ),
-                      ),
+                      ],
                     ),
-                    const SizedBox(width: 10,),
-                    Container(
-                      height: 45,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        color: Colors.cyan,
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () async{
-                          try {
-                            var docId = FirebaseFirestore.instance
-                                .collection("user")
-                                .doc()
-                                .id;
-                            String? userId=FirebaseAuth.instance.currentUser?.uid;
-                            if(userId==null){
-                              return;}
-                            TodoModelClass newTask = TodoModelClass(
-                              Task: Task.text,
-                              Discription: Discription.text,
-                              Time: Time.text,
-                              Date: TaskDate.text,
-                              PinTask: false,
-                              DoneTask: false,
-                              documentid: docId,
-                            );
-                            await FirebaseFirestore.instance
-                                .collection("user")
-                                .doc(userId).collection('task').doc(docId)
-                                .set(newTask.toJson());
-                            Navigator.push(context,
-                              MaterialPageRoute(
-                                builder: (context) => Bottomnavigationbarscreen(),
-                              ),
-                            );
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Data sending Field")),
-                            );
-                          }
-                          setState(() {
-
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.cyan,
-                          foregroundColor: Colors.white,
+                    SingleChildScrollView(scrollDirection: Axis.horizontal,
+                      child: Row(children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 6),
+                          child: SizedBox(height: 45,
+                            width: size.width *0.640,
+                            child: TextField(
+                              controller: Task,
+                
+                              style: const TextStyle(color: Colors.white),
+                              decoration: InputDecoration(hintText: "Task",
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  fillColor:  Color(0xFF05243E),
+                                  filled: true,
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                            ),
+                          ),
                         ),
-                        child: const Text("Submit"),
-                      ),
-                    )
-                  ]),
-                ],
+                         SizedBox(width: 15,),
+                        Container(
+                          height: size.height * 0.048,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            color: Colors.cyan,
+                          ),
+                          child: TextButton(
+                            onPressed: () async{
+                              try {
+                                var docId = FirebaseFirestore.instance.collection("user").doc()
+                                    .id;
+                                String? userId=FirebaseAuth.instance.currentUser?.uid;
+                                if(userId==null){
+                                  return;}
+                                TodoModelClass newTask = TodoModelClass(
+                                  Task: Task.text,
+                                  Discription: Discription.text,
+                                  Time: Time.text,
+                                  Date: TaskDate.text,
+                                  PinTask: false,
+                                  DoneTask: false,
+                                  documentid: docId,
+                                );
+                                await FirebaseFirestore.instance
+                                    .collection("user")
+                                    .doc(userId).collection('task').doc(docId)
+                                    .set(newTask.toJson());
+                                Navigator.push(context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Bottomnavigationbarscreen(),
+                                  ),
+                                );
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("Data sending Field")),
+                                );
+                              }
+                              setState(() {
+                
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.cyan,
+                              foregroundColor: Colors.white,
+                            ),
+                            child: const Text("Submit"),
+                          ),
+                        )
+                      ]),
+                    ),
+                  ],
+                ),
               ),
             )
           ],),

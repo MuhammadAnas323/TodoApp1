@@ -152,10 +152,13 @@ class _SignInPageState extends State<SignInPage> {
                                       var ForgotEmail=forgotPassword.text.trim();
                                       try{
                                         FirebaseAuth.instance.sendPasswordResetEmail(email: ForgotEmail);
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(content: Text("Please Check Your Email To Change your Password")),
+                                        );
 
                                       }catch (e) {
                                         ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text(e.toString())),
+                                          SnackBar(content: Text("Some Things went Wrong Please Try again")),
                                         );
                                       }Navigator.pop(context);
                                     },
