@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:todo_app/usercheckscreen.dart';
 
 class Splashscreen extends StatefulWidget {
@@ -14,12 +16,13 @@ class SplashscreenState extends State<Splashscreen> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 1), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute<void>(
-          builder: (BuildContext context) => UsercheckScreen(),
-        ),
-      );
+      Get.off(() => UsercheckScreen());
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute<void>(
+      //     builder: (BuildContext context) => UsercheckScreen(),
+      //   ),
+      // );
     });
   }
   @override

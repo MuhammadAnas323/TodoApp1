@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'bottomnavigation bar screen.dart';
 import 'onboardingscreen.dart';
 
@@ -17,17 +19,20 @@ class _UsercheckScreenState extends State<UsercheckScreen> {
       if (!mounted) return;
 
       if (user == null) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => OnboardingScreens()),
-              (route) => false,
-        );
+        Get.offAll(() => OnboardingScreens());
+        // Navigator.pushAndRemoveUntil(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => OnboardingScreens()),
+        //       (route) => false,
+        // );
       } else {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => Bottomnavigationbarscreen()),
-              (route) => false,
-        );}
+        Get.offAll(() => Bottomnavigationbarscreen());
+        // Navigator.pushAndRemoveUntil(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => Bottomnavigationbarscreen()),
+        //       (route) => false,
+        // );
+      }
     });
   }
 

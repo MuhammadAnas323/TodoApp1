@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:todo_app/main.dart';
 import 'bottomnavigation bar screen.dart';
@@ -147,9 +149,7 @@ class _CalenderPageState extends State<CalenderPage> {
                         onPressed: () async{
                           try {
                             var docId = FirebaseFirestore.instance
-                                .collection("user")
-                                .doc()
-                                .id;
+                                .collection("user").doc().id;
                             String? userId=FirebaseAuth.instance.currentUser?.uid;
                             if(userId==null){
                               return;}
@@ -166,19 +166,18 @@ class _CalenderPageState extends State<CalenderPage> {
                                 .collection("user")
                                 .doc(userId).collection('task').doc(docId)
                                 .set(newTask.toJson());
-                            Navigator.push(context,
-                              MaterialPageRoute(
-                                builder: (context) => Bottomnavigationbarscreen(),
-                              ),
-                            );
+                           Get.off(()=>Bottomnavigationbarscreen());
+                           //  Navigator.push(context,
+                           //    MaterialPageRoute(
+                           //      builder: (context) => Bottomnavigationbarscreen(),
+                           //    ),
+                           //  );
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Data sending Field")),
+                              SnackBar(content: Text("Task Adding Field")),
                             );
                           }
-                          setState(() {
-
-                          });
+                          setState(() {});
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.cyan,

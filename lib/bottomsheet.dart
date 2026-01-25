@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'getX.dart';
 import 'menuepage.dart';
 import 'modelclass.dart';
 
@@ -15,6 +19,7 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
   late TextEditingController Discription=TextEditingController();
   late TextEditingController Date=TextEditingController();
   late TextEditingController Time=TextEditingController();
+  final GetxClass controller = Get.put(GetxClass());
   final formKey = GlobalKey<FormState>();
 
 
@@ -106,97 +111,68 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
                 Row(
                   children: [
                     Expanded(
-                      child: SizedBox(
-                        height: size.height * 0.055,
-                        child: TextFormField(
-                          style: TextStyle(color: Colors.white),
-                          controller:Date,
-                          key: ValueKey("Date"),
-                          decoration: InputDecoration(
-                            fillColor: Color(0xFF05243E),
-                            filled: true,
-                            prefixIcon: Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Icon(
-                                Icons.calendar_month_rounded,
-                                color: Colors.white,
-                              ),
-                            ),
-                            hintText: "Date",
-                            hintStyle: TextStyle(color: Colors.white),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
+                      child: TextFormField(
+                        readOnly: true,
+                        style: TextStyle(color: Colors.white),
+                        controller: Date,
+                        key:ValueKey("Date"),
+                        decoration: InputDecoration(
+                          isDense: true,
+                          fillColor: Color(0xFF05243E),
+                          filled: true,
+                          prefixIcon: Icon(Icons.calendar_month_rounded, color: Colors.white),
+                          hintText: "Date",
+                          hintStyle: TextStyle(color: Colors.white),
+                          border:  OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please Enter Date";
-                            }
-                            return null;
-                          },
-                          onTap: () async {
-                            DateTime? datePicked = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(1947),
-                              lastDate: DateTime(2080),
-                            );
-                            if (datePicked != null) {
-                              Date.text =
-                              "${datePicked.day}/${datePicked.month}/${datePicked.year}";
-                              setState(() {});
-                            };
-                          },
                         ),
+                        validator: (value) => (value == null || value.isEmpty) ? "Please Enter Date" : null,
+                        onTap: () async {
+                          DateTime? datePicked = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1947),
+                            lastDate: DateTime(2080),
+                          );
+                          if (datePicked != null) {
+                            setState(() {
+                              Date.text = "${datePicked.day}/${datePicked.month}/${datePicked.year}";
+                            });
+                          }
+                        },
                       ),
                     ),
-                    SizedBox(width: 20,),
+                    SizedBox(width: 20),
                     Expanded(
-                      child: SizedBox(
-                        height: size.height * 0.055,
-                        child: TextFormField(
-                          style: TextStyle(color: Colors.white),
-                          controller:Time,
-                          key: ValueKey("Time"),
-                          decoration: InputDecoration(
-                            fillColor: Color(0xFF05243E),
-                            filled: true,
-                            prefixIcon: Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Icon(
-                                Icons.access_time_sharp,
-                                color: Colors.white,
-                              ),
-                            ),
-                            hintText: "Time",
-                            hintStyle: TextStyle(color: Colors.white),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
+                      child: TextFormField(
+                        readOnly: true,
+                        style:TextStyle(color: Colors.white),
+                        controller: Time,
+                        key: ValueKey("Time"),
+                        decoration: InputDecoration(
+                          isDense: true,
+                          fillColor: Color(0xFF05243E),
+                          filled: true,
+                          prefixIcon:Icon(Icons.access_time_sharp, color: Colors.white),
+                          hintText: "Time",
+                          hintStyle:TextStyle(color: Colors.white),
+                          border:OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please Enter Time";
-                            }
-                            return null;
-                          },
-                          onTap: () async {
-                            TimeOfDay? pickedTime =
-                            await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.now(),
-                            );
-                            if (pickedTime != null) {
-                              Time.text =
-                              "${pickedTime.hour}:${pickedTime.minute}";
-                            }
-                            setState(() {});
-                          },
                         ),
+                        validator: (value) => (value == null || value.isEmpty) ? "Please Enter Time" : null,
+                        onTap: () async {
+                          TimeOfDay? pickedTime = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                          );
+                          if (pickedTime != null) {
+                            setState(() {
+                              Time.text = pickedTime.format(context);
+                            });
+                          }
+                        },
                       ),
                     ),
                   ],
@@ -244,13 +220,14 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
                                 .collection("user")
                                 .doc(userId).collection('task').doc(docId)
                                 .set(newTask.toJson());
-                            Navigator.pop(context,
-                              MaterialPageRoute(
-                                builder: (context) => MenuPage(),
-                              ),
-                            );setState(() {
-
-                            });
+                            Get.back();
+                            // Navigator.pop(context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => MenuPage(),
+                            //   ),
+                            // );setState(() {
+                            //
+                            // });
                           } else {
                             widget.taskModel!.Task = Task.text;
                             widget.taskModel!.Discription = Discription.text;
@@ -266,13 +243,14 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
                               "Date": Date.text,
                               "Time": Time.text,
                             });
-                            Navigator.pop(context);
+                            Get.back();
                           }
 
                         }
-                        setState(() {
-
-                        }); },
+                        // setState(() {
+                        //
+                        // });
+                        },
                       style: ElevatedButton.styleFrom(
                         // fixedSize: Size(166, 45),
                         shape: RoundedRectangleBorder(

@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:todo_app/taskpage.dart';
 import 'bottomsheet.dart';
+import 'getX.dart';
 import 'modelclass.dart';
 
 class MenuPage extends StatefulWidget {
@@ -12,12 +16,12 @@ class MenuPage extends StatefulWidget {
   State<MenuPage> createState() => _MenuPageState();
 }
 class _MenuPageState extends State<MenuPage> {
-  int index=0;
   TextEditingController SearchController = TextEditingController();
   String search = "";
   List<String> items = ["By Pin", "By Name", "By Month"];
   String? selecteditems = "By Name";
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final GetxClass controller = Get.put(GetxClass());
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -39,83 +43,67 @@ class _MenuPageState extends State<MenuPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Expanded(flex: 3,
+                  Expanded(
+                    flex: 3,
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SizedBox(
-                        height:  size.height * 0.055,
-                        child: TextFormField(
-                          controller: SearchController,
-                          style: TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(20),
-                              ),
-                            ),
-                            suffixIcon: Icon(Icons.search, color: Colors.white),
-                            hintText: "Search by task title",
-                            hintStyle: TextStyle(color: Colors.white),
-                            fillColor: Color(0xFF1248AA),
-                            filled: true,
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: SearchController,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          isDense: true,
+                          filled: true,
+                          fillColor: const Color(0xFF1248AA),
+                          hintText: "Search...",
+                          hintStyle: const TextStyle(color: Colors.white70),
+                          suffixIcon: const Icon(Icons.search, color: Colors.white),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide.none,
                           ),
-                          onChanged: (String? value) {
-                            setState(() {
-                              search = value.toString();
-                            });
-                          },
                         ),
+                        onChanged: (value) => setState(() => search = value),
                       ),
                     ),
                   ),
                   Expanded(
                     flex: 2,
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        height: size.height * 0.05,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          color: Color(0xFF05243E),
+                          color: const Color(0xFF05243E),
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Row(
-                          children: [
-                            if (!isSmall) ...[
-                              SizedBox(width: 6),
-                              Text("  Sort ", style: TextStyle(color: Colors.white,fontSize: size.width* 0.04)),
-                            ],
-                            Expanded(
-                              child: DropdownButton<String>(
-                                value: selecteditems,
-                                dropdownColor: Color(0xFF05243E),
-                                iconEnabledColor: Colors.white,
-                                style: TextStyle(color: Colors.white),
-                                items: items.map((e)=>DropdownMenuItem(value: e,
-                                  child: Text(e, style: TextStyle(color: Colors.white)),
-                                )
-                                ).toList(),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    selecteditems = newValue;
-                                  });
-                                },
-                              ),
-                            )
-                          ],
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            value: selecteditems,
+                            dropdownColor: const Color(0xFF05243E),
+                            iconEnabledColor: Colors.white,
+                            style: const TextStyle(color: Colors.white),
+                            items: items.map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e, overflow: TextOverflow.ellipsis),
+                            )).toList(),
+                            onChanged: (value) => setState(() => selecteditems = value),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ],),
+                ],
+              ),
               Expanded(
-                child: StreamBuilder(
-                  stream:
-                  FirebaseFirestore.instance.collection("user").doc(
-                      FirebaseAuth.instance.currentUser?.uid).collection("task").snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                child:
+                // StreamBuilder(
+                //   stream:
+                //   FirebaseFirestore.instance.collection("user").doc(
+                //       FirebaseAuth.instance.currentUser?.uid).collection("task").snapshots(),
+                  Obx (() {
+                    if (controller.isTaskLoading.value) {
                       return Center(child: CircularProgressIndicator());
                     }
                     return Column(
@@ -130,11 +118,11 @@ class _MenuPageState extends State<MenuPage> {
                         Flexible(
                           child: ListView.builder(
                             padding: EdgeInsets.zero,
-                            itemCount: snapshot.data!.docs.length,
+                            itemCount: controller.allTask.length,
                             itemBuilder: (context, index) {
                               TodoModelClass modelClass =
                               TodoModelClass.fromJson(
-                                snapshot.data!.docs[index].data(),
+                                controller.allTask[index].toJson()
                               );
                               String taskTitle = modelClass.Task.toLowerCase();
                               String searchText = SearchController.text
@@ -153,15 +141,16 @@ class _MenuPageState extends State<MenuPage> {
                                                 size: 30,
                                               ),
                                               onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        TaskDetailPage(
-                                                          taskdata: modelClass,
-                                                        ),
-                                                  ),
-                                                );
+                                                Get.to(() => TaskDetailPage(taskdata: modelClass));
+                                                // Navigator.push(
+                                                //   context,
+                                                //   MaterialPageRoute(
+                                                //     builder: (context) =>
+                                                //         TaskDetailPage(
+                                                //           taskdata: modelClass,
+                                                //         ),
+                                                //   ),
+                                                // );
                                               },
                                             ),
                                             title: Text(
@@ -202,15 +191,16 @@ class _MenuPageState extends State<MenuPage> {
                                             size: 30,
                                           ),
                                           onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    TaskDetailPage(
-                                                      taskdata: modelClass,
-                                                    ),
-                                              ),
-                                            );
+                                            Get.to(() => TaskDetailPage(taskdata: modelClass));
+                                            // Navigator.push(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //     builder: (context) =>
+                                            //         TaskDetailPage(
+                                            //           taskdata: modelClass,
+                                            //         ),
+                                            //   ),
+                                            // );
                                           },
                                         ),
                                         title: Text(
@@ -246,8 +236,8 @@ class _MenuPageState extends State<MenuPage> {
                         ),
                       ],
                     );
-                  },
-                ),
+                  },)
+               // ),
               ),
             ],
           ),

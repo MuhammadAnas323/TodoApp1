@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:todo_app/signinpage.dart';
 import 'package:todo_app/signuppage.dart';
 
 class OnboardingScreens extends StatelessWidget {
@@ -113,10 +116,11 @@ class OnboardingScreens extends StatelessWidget {
             activeColor: Colors.teal,
           ),
           onDone: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => SignUpScreen()),
-            );
+            Get.off(() => SignInPage());
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(builder: (_) => SignUpScreen()),
+            // );
           },
         ),
       ),
