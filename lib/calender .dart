@@ -89,9 +89,9 @@ class _CalenderPageState extends State<CalenderPage> {
                 onFormatChanged: onFormatChange,
               ),
             ),
-            const SizedBox(height: 60,),
+            SizedBox(height: 60,),
             Container(height: 110, width: 390,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 color: Colors.white,
               ),
@@ -100,7 +100,7 @@ class _CalenderPageState extends State<CalenderPage> {
                 children: [
                   Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(left: 13),
                         child: Text("Set Task For",
                           style: TextStyle(fontSize: 17,fontWeight: .w600),),
@@ -110,7 +110,7 @@ class _CalenderPageState extends State<CalenderPage> {
                           controller: TaskDate,
                           readOnly: true,
                           textAlign: TextAlign.start,
-                          style: const TextStyle(color: Colors.black,
+                          style: TextStyle(color: Colors.black,
                               fontWeight: FontWeight.bold),
                           decoration: InputDecoration(border: OutlineInputBorder(borderSide: .none),
                             filled: true,
@@ -163,7 +163,11 @@ class _CalenderPageState extends State<CalenderPage> {
                                 .collection("user")
                                 .doc(userId).collection('task').doc(docId)
                                 .set(newTask.toJson());
-                           Get.off(()=>Bottomnavigationbarscreen());
+                           Get.snackbar("Task","added Succesfully",backgroundColor: Colors.green);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) =>Bottomnavigationbarscreen ()),
+                            );
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text("Task Adding Field")),
