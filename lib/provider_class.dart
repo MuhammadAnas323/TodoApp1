@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +21,8 @@ class ProviderClass extends ChangeNotifier {
     final uid = FirebaseAuth.instance.currentUser!.uid;
 
     FirebaseFirestore.instance
-        .collection("user")
-        .doc(uid)
-        .collection("task")
-        .snapshots()
+        .collection("user").doc(uid)
+        .collection("task").snapshots()
         .listen((snapshot) {
 
       allTask = snapshot.docs.map((e) => TodoModelClass.fromJson(e.data())).toList();

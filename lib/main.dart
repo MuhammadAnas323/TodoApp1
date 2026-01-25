@@ -16,10 +16,9 @@ void main() async {
     url: dotenv.env["SUPABSE_URL"]!,
     anonKey: dotenv.env["ANON_KEY"]!,
   );
-  runApp(MultiProvider(
-    providers:[ ChangeNotifierProvider(create:(_)=>ProviderClass(),)],
-    child: MaterialApp(debugShowCheckedModeBanner: false, home: Splashscreen())),
-  );
+  runApp(ChangeNotifierProvider(
+    create:(_)=>ProviderClass(),
+    child: MaterialApp(debugShowCheckedModeBanner: false, home: Splashscreen())));
 }
 
 class MainPage extends StatefulWidget {

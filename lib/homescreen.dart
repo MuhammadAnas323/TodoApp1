@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,39 +23,6 @@ class _HomePageState extends State<HomePage> {
       provider.getProfile();
     });
   }
-
-  // void getdata() {
-  //   setState(() {
-  //     isloading = true;
-  //   });
-  //   try {
-  //     final uid = FirebaseAuth.instance.currentUser?.uid;
-  //     if (uid != null) {
-  //       FirebaseFirestore.instance
-  //           .collection('user')
-  //           .doc(uid)
-  //           .snapshots()
-  //           .listen((snapshot) {
-  //             if (snapshot.exists) {
-  //               setState(() {
-  //                 profileUrl = snapshot.data()?['profile_url'];
-  //                 isloading = false;
-  //               });
-  //             }
-  //           });
-  //     }
-  //   } catch (e) {
-  //     setState(() {
-  //       isloading = false;
-  //     });
-  //     ScaffoldMessenger.of(
-  //       context,
-  //     ).showSnackBar(SnackBar(content: Text('Error: $e')));
-  //     setState(() {
-  //       isloading = false;
-  //     });
-  //   }
-  // }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -132,16 +98,6 @@ class _HomePageState extends State<HomePage> {
                     if (taskprovider.isTaskLoading) {
                       return Center(child: CircularProgressIndicator());
                     }
-                    // if (snapshot.hasError) {
-                    //   return Text('Something went Wrong Please try again');
-                    // }
-                    // if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    //   return Center(child: Text("No tasks found",
-                    //       style: TextStyle(color: Colors.white)));
-                    // }
-                    // List<TodoModelClass> modelclass = snapshot.data!.docs
-                    //     .map((doc) => TodoModelClass.fromJson(doc.data() as Map<String, dynamic>))
-                    //     .toList();
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -155,8 +111,6 @@ class _HomePageState extends State<HomePage> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: taskprovider.incompleteTask.length,
                           itemBuilder: (context, int index) {
-                            // if (taskprovider[index].DoneTask == false) {
-                            //   TodoModelClass modelClass = modelclass[index];
                             final modelClass = taskprovider.incompleteTask[index];
                             return Padding(
                               padding: const EdgeInsets.all(11),

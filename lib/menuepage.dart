@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/provider_class.dart';
 import 'package:todo_app/taskpage.dart';
 import 'bottomsheet.dart';
-import 'modelclass.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -20,15 +18,6 @@ class _MenuPageState extends State<MenuPage> {
   List<String> items = ["By Pin", "By Name", "By Month"];
   String? selecteditems = "By Name";
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Future.microtask((){
-      final provider=context.read<ProviderClass>();
-      provider.getTask();
-    });
-  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -96,7 +85,7 @@ class _MenuPageState extends State<MenuPage> {
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
                                     value: selecteditems,
-                                    isExpanded: true, // Prevents layout crash on small screens
+                                    isExpanded: true,
                                     dropdownColor: const Color(0xFF05243E),
                                     iconEnabledColor: Colors.white,
                                     style: const TextStyle(color: Colors.white, fontSize: 13),
@@ -199,7 +188,6 @@ class _MenuPageState extends State<MenuPage> {
               return TaskBottomSheetScreen();
             },
           );
-          setState(() {});
         },
         shape: CircleBorder(),
         backgroundColor: Color(0xFF63D9F3),

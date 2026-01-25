@@ -343,7 +343,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                //minimumSize: Size(1, 60),
                               ),
                               child: Icon(Icons.apple, size: 30),
                             ),SizedBox(width: 20),
