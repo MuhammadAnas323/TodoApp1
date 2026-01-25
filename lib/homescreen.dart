@@ -14,40 +14,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 class _HomePageState extends State<HomePage> {
-  // bool isloading=false;
-  // String? profileUrl;
   final GetxClass controller = Get.put(GetxClass());
-  @override
-  // void initState() {
-  //   super.initState();
-  //   getdata();
-  // }
-  // void getdata(){
-  //   setState(() {
-  //     isloading=true;
-  //   });
-  //   try{
-  //     final uid = FirebaseAuth.instance.currentUser?.uid;
-  //     if (uid != null) {
-  //       FirebaseFirestore.instance.collection('user').doc(uid).snapshots().listen((snapshot) {
-  //         if (snapshot.exists) {
-  //           setState(() {
-  //             profileUrl = snapshot.data()?['profile_url'];
-  //             isloading=false;
-  //           });
-  //         }});
-  //     }
-  //   }catch(e){
-  //     setState(() {
-  //       isloading=false;
-  //     });
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Error: $e')),
-  //     );setState(() {
-  //       isloading=false;
-  //     });
-  //   }
-  // }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -94,9 +61,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 )),SizedBox(height: 20,),
-                // StreamBuilder<QuerySnapshot>(
-                //     stream: FirebaseFirestore.instance.collection("user").doc(
-                //         FirebaseAuth.instance.currentUser?.uid).collection("task").snapshots(),
                 Obx(() {
                   if (controller.isTaskLoading.value) {
                     return Center(child: CircularProgressIndicator());
@@ -123,9 +87,6 @@ class _HomePageState extends State<HomePage> {
                                     child: Icon(Icons.navigate_next_rounded, size: 30),
                                     onTap: () {
                                       Get.to(() => TaskDetailPage(taskdata: task));
-                                      // Navigator.push(context,
-                                      //   MaterialPageRoute(builder: (context) => TaskDetailPage(taskdata: task)),
-                                      // );
                                     },
                                   ),
                                   title: Text(task.Task, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18), maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -159,10 +120,6 @@ class _HomePageState extends State<HomePage> {
                                     child: Icon(Icons.navigate_next_rounded, size: 30),
                                     onTap: () {
                                       Get.to(() => TaskDetailPage(taskdata: task));
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(builder: (context) => TaskDetailPage(taskdata: task)),
-                                      // );
                                     },
                                   ),
                                   title: Row(

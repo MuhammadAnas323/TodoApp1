@@ -2,13 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-
 import 'bottomnavigation bar screen.dart';
 import 'bottomsheet.dart';
 import 'getX.dart';
-import 'main.dart';
 import 'modelclass.dart';
 
 class TaskDetailPage extends StatefulWidget {
@@ -181,9 +177,6 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                                     "DoneTask":true,
                                   });
                                   Get.off(() => Bottomnavigationbarscreen());
-                                  // setState(() {
-                                  //
-                                  // });
                                 },
                                 style: ElevatedButton.styleFrom(
 
@@ -242,11 +235,6 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                                               doc(widget.taskdata.documentid)
                                                   .delete();
                                               Get.offAll(() => Bottomnavigationbarscreen());
-                                              // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                                              //   builder: (context) => Bottomnavigationbarscreen(initialindex: 1,),
-                                              // ),
-                                              //       (route)=>false,
-                                              // );
                                             },
                                             child:Text(
                                               "Yes",
@@ -308,15 +296,6 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                                     },
                                     );
                                     Get.off(() => Bottomnavigationbarscreen());
-                                    // Navigator.pushReplacement(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) =>
-                                    //         Bottomnavigationbarscreen(),
-                                    //   ),
-                                    // );setState(() {
-                                    //
-                                    // });
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color(0xFF05243E),

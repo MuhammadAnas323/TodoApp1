@@ -117,10 +117,6 @@ class OnboardingScreens extends StatelessWidget {
           ),
           onDone: () {
             Get.off(() => SignInPage());
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(builder: (_) => SignUpScreen()),
-            // );
           },
         ),
       ),

@@ -2,10 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
 import 'getX.dart';
-import 'menuepage.dart';
 import 'modelclass.dart';
 
 class TaskBottomSheetScreen extends StatefulWidget {
@@ -184,10 +181,7 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
                       padding: const EdgeInsets.all(5),
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pop(context);
-                          setState(() {
-
-                          });
+                          Get.back();
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -221,13 +215,6 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
                                 .doc(userId).collection('task').doc(docId)
                                 .set(newTask.toJson());
                             Get.back();
-                            // Navigator.pop(context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => MenuPage(),
-                            //   ),
-                            // );setState(() {
-                            //
-                            // });
                           } else {
                             widget.taskModel!.Task = Task.text;
                             widget.taskModel!.Discription = Discription.text;
@@ -244,12 +231,7 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
                               "Time": Time.text,
                             });
                             Get.back();
-                          }
-
-                        }
-                        // setState(() {
-                        //
-                        // });
+                          }}
                         },
                       style: ElevatedButton.styleFrom(
                         // fixedSize: Size(166, 45),

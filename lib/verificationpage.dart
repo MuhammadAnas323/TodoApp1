@@ -108,12 +108,6 @@ class _VerificationPageState extends State<VerificationPage> {
                           );
                         }
                         Get.off(()=>SignInPage());
-                        // Navigator.pushReplacement(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (BuildContext context) => SignInPage(),
-                        //   ),
-                        // );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.cyan,

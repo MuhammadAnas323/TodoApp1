@@ -17,12 +17,6 @@ class SplashscreenState extends State<Splashscreen> {
     super.initState();
     Timer(Duration(seconds: 1), () {
       Get.off(() => UsercheckScreen());
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute<void>(
-      //     builder: (BuildContext context) => UsercheckScreen(),
-      //   ),
-      // );
     });
   }
   @override

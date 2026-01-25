@@ -20,18 +20,8 @@ class _UsercheckScreenState extends State<UsercheckScreen> {
 
       if (user == null) {
         Get.offAll(() => OnboardingScreens());
-        // Navigator.pushAndRemoveUntil(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => OnboardingScreens()),
-        //       (route) => false,
-        // );
       } else {
         Get.offAll(() => Bottomnavigationbarscreen());
-        // Navigator.pushAndRemoveUntil(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => Bottomnavigationbarscreen()),
-        //       (route) => false,
-        // );
       }
     });
   }

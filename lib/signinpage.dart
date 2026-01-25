@@ -20,44 +20,6 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController password = TextEditingController();
   TextEditingController forgotPassword= TextEditingController();
   FirebaseAuth auth = FirebaseAuth.instance;
-  // void showErrorDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) =>
-  //         AlertDialog(
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(30),
-  //           ),
-  //           contentPadding: EdgeInsets.zero,
-  //           content: SizedBox(
-  //             height: 220,
-  //             child: Column(
-  //               mainAxisAlignment: MainAxisAlignment.center,
-  //               children: [
-  //                 Icon(
-  //                   Icons.cancel,
-  //                   color: Colors.red,
-  //                   size: 40,
-  //                 ),
-  //                 SizedBox(height: 15),
-  //                 Text(
-  //                   "Sign in Failed",
-  //                   style: TextStyle(
-  //                     color: Colors.black,
-  //                     fontSize: 20,
-  //                     fontWeight: FontWeight.bold,
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //   );
-  //   Future.delayed(Duration(seconds: 2), () {
-  //     Get.back();
-  //     //Navigator.pop(context);
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +108,6 @@ class _SignInPageState extends State<SignInPage> {
                                     child: Text("Cancel"),
                                     onPressed: () {
                                       Get.back();
-                                      //Navigator.pop(context);
                                     },
                                   ),ElevatedButton(
                                     child: Text("Send"),
@@ -158,11 +119,8 @@ class _SignInPageState extends State<SignInPage> {
                                         Get.back();
                                       }catch (e) {
                                         Get.snackbar("Email Sending Field", "Please Try Again"
-                                        // ScaffoldMessenger.of(context).showSnackBar(
-                                        //   SnackBar(content: Text(e.toString())),
                                         );
                                       }Get.back();
-                                      //Navigator.pop(context);
                                     },
                                   ),
                                 ],
@@ -195,12 +153,6 @@ class _SignInPageState extends State<SignInPage> {
                               });
                               if (!mounted) return;
                               Get.off(() => Bottomnavigationbarscreen());
-                              // Navigator.pushReplacement(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) =>Bottomnavigationbarscreen(),
-                              //   ),
-                              // );
                             } else {
                               setState(() {
                                 isloading = false;
@@ -211,19 +163,6 @@ class _SignInPageState extends State<SignInPage> {
                                 Get.back();
                               },
                                   child:Text("Ok") ));
-                              // showDialog(
-                              //   context: context,
-                              //   builder: (context) => AlertDialog(
-                              //     title: const Text("Verify Email"),
-                              //     content: const Text("Your email is not verified yet. Please check your inbox."),
-                              //     actions: [
-                              //       TextButton(
-                              //         onPressed: () => Navigator.pop(context),
-                              //         child: const Text("OK"),
-                              //       ),
-                              //     ],
-                              //   ),
-                              // );
                               await auth.signOut();
                             }
                           } catch (e) {
@@ -234,19 +173,6 @@ class _SignInPageState extends State<SignInPage> {
                             Get.snackbar("Login Field", "Please Try Again",
                               backgroundColor: Colors.white,
                             );
-                            // showDialog(
-                            //   context: context,
-                            //   builder: (context) => AlertDialog(
-                            //     title: const Text("Login Error"),
-                            //     content: Text(e.toString()),
-                            //     actions: [
-                            //       TextButton(
-                            //         onPressed: () => Navigator.pop(context),
-                            //         child: const Text("OK"),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // );
                           }
                         }
                       },
@@ -263,10 +189,6 @@ class _SignInPageState extends State<SignInPage> {
                         Text("Don't have account?",style: TextStyle(color: Colors.white,fontSize: 16),),
                         TextButton(onPressed: (){
                           Get.offAll(() => SignUpScreen());
-                          // Navigator.pushAndRemoveUntil(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => SignUpScreen()),
-                          //       (route) => false,);
                         },
                             child:Text("sign up",style:
                             TextStyle(color: Color(0xFF0EA5E9),fontSize: 17))

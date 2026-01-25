@@ -98,10 +98,6 @@ class _MenuPageState extends State<MenuPage> {
               ),
               Expanded(
                 child:
-                // StreamBuilder(
-                //   stream:
-                //   FirebaseFirestore.instance.collection("user").doc(
-                //       FirebaseAuth.instance.currentUser?.uid).collection("task").snapshots(),
                   Obx (() {
                     if (controller.isTaskLoading.value) {
                       return Center(child: CircularProgressIndicator());
@@ -142,15 +138,6 @@ class _MenuPageState extends State<MenuPage> {
                                               ),
                                               onTap: () {
                                                 Get.to(() => TaskDetailPage(taskdata: modelClass));
-                                                // Navigator.push(
-                                                //   context,
-                                                //   MaterialPageRoute(
-                                                //     builder: (context) =>
-                                                //         TaskDetailPage(
-                                                //           taskdata: modelClass,
-                                                //         ),
-                                                //   ),
-                                                // );
                                               },
                                             ),
                                             title: Text(
@@ -192,15 +179,6 @@ class _MenuPageState extends State<MenuPage> {
                                           ),
                                           onTap: () {
                                             Get.to(() => TaskDetailPage(taskdata: modelClass));
-                                            // Navigator.push(
-                                            //   context,
-                                            //   MaterialPageRoute(
-                                            //     builder: (context) =>
-                                            //         TaskDetailPage(
-                                            //           taskdata: modelClass,
-                                            //         ),
-                                            //   ),
-                                            // );
                                           },
                                         ),
                                         title: Text(

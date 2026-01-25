@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:todo_app/main.dart';
 import 'bottomnavigation bar screen.dart';
 import 'modelclass.dart';
 
@@ -128,7 +126,6 @@ class _CalenderPageState extends State<CalenderPage> {
                       child: SizedBox(height: 45, width: 230,
                         child: TextField(
                           controller: Task,
-                          //readOnly: true,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(hintText: "Task",
                               hintStyle: TextStyle(color: Colors.white),
@@ -167,11 +164,6 @@ class _CalenderPageState extends State<CalenderPage> {
                                 .doc(userId).collection('task').doc(docId)
                                 .set(newTask.toJson());
                            Get.off(()=>Bottomnavigationbarscreen());
-                           //  Navigator.push(context,
-                           //    MaterialPageRoute(
-                           //      builder: (context) => Bottomnavigationbarscreen(),
-                           //    ),
-                           //  );
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text("Task Adding Field")),
