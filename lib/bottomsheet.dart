@@ -230,6 +230,7 @@ class _TaskBottomSheetScreenState extends State<TaskBottomSheetScreen> {
                               "Date": Date.text,
                               "Time": Time.text,
                             });
+                           // Navigator.pop(context);
                             Get.back();
                           }}
                         },

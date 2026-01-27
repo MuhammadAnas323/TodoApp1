@@ -76,7 +76,7 @@ class _CalenderPageState extends State<CalenderPage> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: TableCalendar(
-                calendarStyle: const CalendarStyle(
+                calendarStyle:CalendarStyle(
                   defaultTextStyle: TextStyle(color: Colors.white60),
                   weekendTextStyle: TextStyle(color: Colors.yellow),
                 ),
@@ -89,7 +89,7 @@ class _CalenderPageState extends State<CalenderPage> {
                 onFormatChanged: onFormatChange,
               ),
             ),
-            SizedBox(height: 60,),
+            SizedBox(height: 40,),
             Container(height: 110, width: 390,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
