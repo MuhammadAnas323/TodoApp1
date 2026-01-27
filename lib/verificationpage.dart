@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:todo_app/signinpage.dart';
 
 
@@ -87,7 +89,7 @@ class _VerificationPageState extends State<VerificationPage> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  "Verification email sent Check your inbox.",
+                                  "Verification email sent Please Check your  Email inbox.",
                                 ),
                               ),
                             );
@@ -105,12 +107,7 @@ class _VerificationPageState extends State<VerificationPage> {
                             ),
                           );
                         }
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => SignInPage(),
-                          ),
-                        );
+                        Get.off(()=>SignInPage());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.cyan,

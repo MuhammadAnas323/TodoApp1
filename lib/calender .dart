@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:todo_app/main.dart';
 import 'bottomnavigation bar screen.dart';
 import 'modelclass.dart';
 
@@ -76,7 +76,7 @@ class _CalenderPageState extends State<CalenderPage> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: TableCalendar(
-                calendarStyle: const CalendarStyle(
+                calendarStyle:CalendarStyle(
                   defaultTextStyle: TextStyle(color: Colors.white60),
                   weekendTextStyle: TextStyle(color: Colors.yellow),
                 ),
@@ -89,9 +89,9 @@ class _CalenderPageState extends State<CalenderPage> {
                 onFormatChanged: onFormatChange,
               ),
             ),
-            const SizedBox(height: 60,),
+            SizedBox(height: 40,),
             Container(height: 110, width: 390,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 color: Colors.white,
               ),
@@ -100,7 +100,7 @@ class _CalenderPageState extends State<CalenderPage> {
                 children: [
                   Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(left: 13),
                         child: Text("Set Task For",
                           style: TextStyle(fontSize: 17,fontWeight: .w600),),
@@ -110,7 +110,7 @@ class _CalenderPageState extends State<CalenderPage> {
                           controller: TaskDate,
                           readOnly: true,
                           textAlign: TextAlign.start,
-                          style: const TextStyle(color: Colors.black,
+                          style: TextStyle(color: Colors.black,
                               fontWeight: FontWeight.bold),
                           decoration: InputDecoration(border: OutlineInputBorder(borderSide: .none),
                             filled: true,
@@ -126,7 +126,6 @@ class _CalenderPageState extends State<CalenderPage> {
                       child: SizedBox(height: 45, width: 230,
                         child: TextField(
                           controller: Task,
-                          //readOnly: true,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(hintText: "Task",
                               hintStyle: TextStyle(color: Colors.white),
@@ -147,9 +146,7 @@ class _CalenderPageState extends State<CalenderPage> {
                         onPressed: () async{
                           try {
                             var docId = FirebaseFirestore.instance
-                                .collection("user")
-                                .doc()
-                                .id;
+                                .collection("user").doc().id;
                             String? userId=FirebaseAuth.instance.currentUser?.uid;
                             if(userId==null){
                               return;}
@@ -166,19 +163,17 @@ class _CalenderPageState extends State<CalenderPage> {
                                 .collection("user")
                                 .doc(userId).collection('task').doc(docId)
                                 .set(newTask.toJson());
-                            Navigator.push(context,
-                              MaterialPageRoute(
-                                builder: (context) => Bottomnavigationbarscreen(),
-                              ),
+                           Get.snackbar("Task","added Succesfully",backgroundColor: Colors.green);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) =>Bottomnavigationbarscreen ()),
                             );
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Data sending Field")),
+                              SnackBar(content: Text("Task Adding Field")),
                             );
                           }
-                          setState(() {
-
-                          });
+                          setState(() {});
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.cyan,

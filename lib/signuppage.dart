@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:todo_app/signinpage.dart';
 import 'package:todo_app/verificationpage.dart';
 
@@ -11,7 +12,6 @@ class SignUpScreen extends StatefulWidget {
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
-
 class _SignUpScreenState extends State<SignUpScreen> {
   final formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
@@ -185,102 +185,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               setState(() {
                                 isloading=false;
                               });
-                              await showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (context) =>
-                                    AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      contentPadding: EdgeInsets.zero,
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.check_circle_sharp,
-                                            color: Colors.green,
-                                            size: 70,
-                                          ),
-                                          Center(
-                                            child: Column(
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(25),
-                                                  child: Text(
-                                                    "Your account created successfully",
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 25,
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ), Padding(
-                                                  padding: EdgeInsets.all(15),
-                                                  child: Center(
-                                                    child: Column(
-                                                      children: [
-                                                        Text("You gonna recieve a verification email"),
-                                                        Text("please click on link to verify your account") ],
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      actions: [TextButton(onPressed: () {
-                                        //Navigator.pop(dialogContext);
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(builder: (context) =>
-                                                VerificationPage(),
-                                            ));
-                                      }, child: Text("OK",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),))
-                                      ],
-                                    ),
+                              Get.defaultDialog(backgroundColor: Colors.white,
+                                title: "Account Created",
+                               middleText: "Successfully",titleStyle: TextStyle(fontSize: 20),
+                                  middleTextStyle: TextStyle(fontSize: 18),
+                                textConfirm: "OK",
+                                confirmTextColor: Colors.white,
+                                onConfirm: () {
+                                  Get.to(() => VerificationPage());
+                                },buttonColor: Colors.blueAccent
                               );
                             } catch (e) {
                               setState(() {
                                 isloading=false;
                                 if(!mounted)return;
                               });
-                              showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      contentPadding: EdgeInsets.zero,
-                                      content: SizedBox(
-                                        height: 220,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .center,
-                                          children: [
-                                            Icon(
-                                              Icons.cancel,
-                                              color: Colors.red,
-                                              size: 40,
-                                            ),
-                                            SizedBox(height: 15),
-                                            Text(
-                                              "Sign up Failed",
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                              );
+                              Get.snackbar("Sign Up Field","Please Try Again",backgroundColor: Colors.redAccent);
                             }
                           }},
                         style: ElevatedButton.styleFrom(
@@ -288,7 +208,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          //minimumSize: Size(348, 42),
                         ),
                         child:
                         isloading ? const CircularProgressIndicator(color: Colors.white)
@@ -303,19 +222,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (_, __, ___) => SignInPage(),
-                                transitionsBuilder: (_, animation, __, child) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
-                                transitionDuration: const Duration(milliseconds: 300),
-                              ),
-                            );
+                            Get.to(() => SignInPage());
                             },
                           child: Text(
                             "sign in",
@@ -344,7 +251,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                //minimumSize: Size(1, 60),
                               ),
                               child: Icon(Icons.apple, size: 30),
                             ),SizedBox(width: 20),

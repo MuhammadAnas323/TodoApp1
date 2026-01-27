@@ -1,12 +1,13 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_app/signinpage.dart';
+
+import 'getX.dart';
 
 class LogoutScreen extends StatefulWidget {
   const LogoutScreen({super.key});
@@ -18,6 +19,7 @@ class LogoutScreen extends StatefulWidget {
 class _LogoutScreenState extends State<LogoutScreen> {
   late double screenWidth = MediaQuery.of(context).size.width;
   bool isloading = false;
+  final GetxClass controller = Get.put(GetxClass());
 
   var currentuserid = FirebaseAuth.instance.currentUser;
   final supabase = Supabase.instance.client;
@@ -348,7 +350,7 @@ class _LogoutScreenState extends State<LogoutScreen> {
                                             );
                                           }
                                         },
-                                        child: const Text(
+                                        child:Text(
                                           "Yes",
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -389,17 +391,10 @@ class _LogoutScreenState extends State<LogoutScreen> {
                   onPressed: () async {
                     try {
                       await FirebaseAuth.instance.signOut();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Log Out Succesfully")),
-                      );
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignInPage()),
-                      );
+                      Get.snackbar("Account","Log Out Succesfully");
+                      Get.off(()=>SignInPage());
                     } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Logout Field Please Try Again")),
-                      );
+                      Get.snackbar("Logout","Field Please Try Again");
                     }
                   },
                   child: Text("Logout", style: TextStyle(color: Colors.red)),

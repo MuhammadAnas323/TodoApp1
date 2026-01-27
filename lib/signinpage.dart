@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:todo_app/signuppage.dart';
 import 'bottomnavigation bar screen.dart';
-import 'firebase_options.dart';
 
 
 class SignInPage extends StatefulWidget {
@@ -20,43 +20,6 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController password = TextEditingController();
   TextEditingController forgotPassword= TextEditingController();
   FirebaseAuth auth = FirebaseAuth.instance;
-  void showErrorDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) =>
-          AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            contentPadding: EdgeInsets.zero,
-            content: SizedBox(
-              height: 220,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.cancel,
-                    color: Colors.red,
-                    size: 40,
-                  ),
-                  SizedBox(height: 15),
-                  Text(
-                    "Sign in Failed",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-    );
-    Future.delayed(Duration(seconds: 2), () {
-      Navigator.pop(context);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +107,7 @@ class _SignInPageState extends State<SignInPage> {
                                   TextButton(
                                     child: Text("Cancel"),
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      Get.back();
                                     },
                                   ),ElevatedButton(
                                     child: Text("Send"),
@@ -152,12 +115,12 @@ class _SignInPageState extends State<SignInPage> {
                                       var ForgotEmail=forgotPassword.text.trim();
                                       try{
                                         FirebaseAuth.instance.sendPasswordResetEmail(email: ForgotEmail);
-
+                                        Get.snackbar("Check Your Email", "To Change password",);
+                                        Get.back();
                                       }catch (e) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text(e.toString())),
+                                        Get.snackbar("Email Sending Field", "Please Try Again"
                                         );
-                                      }Navigator.pop(context);
+                                      }Get.back();
                                     },
                                   ),
                                 ],
@@ -189,30 +152,17 @@ class _SignInPageState extends State<SignInPage> {
                                 isloading = false;
                               });
                               if (!mounted) return;
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>Bottomnavigationbarscreen(),
-                                ),
-                              );
+                              Get.off(() => Bottomnavigationbarscreen());
                             } else {
                               setState(() {
                                 isloading = false;
                               });
                               if (!mounted) return;
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text("Verify Email"),
-                                  content: const Text("Your email is not verified yet. Please check your inbox."),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const Text("OK"),
-                                    ),
-                                  ],
-                                ),
-                              );
+                              Get.snackbar("Verify Email", "Your email is not verified yet. Please check your inbox",
+                              mainButton: TextButton(onPressed: (){
+                                Get.back();
+                              },
+                                  child:Text("Ok") ));
                               await auth.signOut();
                             }
                           } catch (e) {
@@ -220,18 +170,8 @@ class _SignInPageState extends State<SignInPage> {
                               isloading = false;
                             });
                             if (!mounted) return;
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text("Login Error"),
-                                content: Text(e.toString()),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text("OK"),
-                                  ),
-                                ],
-                              ),
+                            Get.snackbar("Login Field", "Please Try Again",
+                              backgroundColor: Colors.white,
                             );
                           }
                         }
@@ -248,13 +188,11 @@ class _SignInPageState extends State<SignInPage> {
                       children: [
                         Text("Don't have account?",style: TextStyle(color: Colors.white,fontSize: 16),),
                         TextButton(onPressed: (){
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => SignUpScreen()),
-                                (route) => false,);
+                          Get.offAll(() => SignUpScreen());
                         },
                             child:Text("sign up",style:
-                            TextStyle(color: Color(0xFF0EA5E9),fontSize: 17)) ),
+                            TextStyle(color: Color(0xFF0EA5E9),fontSize: 17))
+                        ),
                       ],
                     ),
                     SizedBox(height: 70,),
