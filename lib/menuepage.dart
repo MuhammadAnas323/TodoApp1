@@ -110,10 +110,9 @@ class _MenuPageState extends State<MenuPage> {
                   ),
                 ],),
               Expanded(
-                child: StreamBuilder(
-                  stream:
-                  FirebaseFirestore.instance.collection("user").doc(
-                      FirebaseAuth.instance.currentUser?.uid).collection("task").snapshots(),
+                child: FutureBuilder(
+                  future: FirebaseFirestore.instance.collection("user").doc(
+                      FirebaseAuth.instance.currentUser?.uid).collection("task").get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());

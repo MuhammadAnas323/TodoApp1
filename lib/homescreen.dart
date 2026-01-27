@@ -84,9 +84,9 @@ class _HomePageState extends State<HomePage> {
                         ],),
                     ),],
                 ),SizedBox(height: 20,),
-                StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance.collection("user").doc(
-                        FirebaseAuth.instance.currentUser?.uid).collection("task").snapshots(),
+                FutureBuilder<QuerySnapshot>(
+                    future: FirebaseFirestore.instance.collection("user").doc(
+                        FirebaseAuth.instance.currentUser?.uid).collection("task").get(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
