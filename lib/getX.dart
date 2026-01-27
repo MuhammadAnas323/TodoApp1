@@ -13,7 +13,7 @@ class GetxClass extends GetxController{
   var completeTask = <TodoModelClass>[].obs;
 
   var profileUrl = ''.obs;
-  var userName = ''.obs;
+  var userName= ''.obs;
   var userEmail = ''.obs;
 
   final User? user = FirebaseAuth.instance.currentUser;
