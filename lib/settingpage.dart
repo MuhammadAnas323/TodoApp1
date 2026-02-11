@@ -154,7 +154,8 @@ class _LogoutScreenState extends State<LogoutScreen> {
                                   icon: Icon(Icons.delete,color: Colors.redAccent,size: 27,),
                                 ),
                               ],
-                            ),SizedBox(height: 25,),TextButton.icon(onPressed: ()async{
+                            ),SizedBox(height: 25,),
+                            TextButton.icon(onPressed: ()async{
                               final XFile? pickedFile = await ImagePicker()
                                   .pickImage(source: ImageSource.camera);
                               if (pickedFile == null) return;
